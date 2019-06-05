@@ -1,0 +1,19 @@
+---
+- hosts: myhost 
+  remote_user: root 
+  vars: 
+    http_port: 88
+
+  tasks: 
+  - name: install package 
+    yum: name=nginx
+  - name: copy template
+    template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+    notify: restart service 
+  - name: start service 
+    service: name=nginx state=started enabled=yes
+    tags: stservice
+ 
+  handlers: 
+  - name: restart service 
+    service: name=nginx state=restarted
